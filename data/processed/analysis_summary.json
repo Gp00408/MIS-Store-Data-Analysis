@@ -1,0 +1,57 @@
+{
+  "total_months": 48,
+  "outlier_months_sales": [
+    "2017-11"
+  ],
+  "outlier_months_profit": [
+    "2015-01",
+    "2016-10",
+    "2016-12",
+    "2017-03"
+  ],
+  "latest_month": "2017-12",
+  "latest_mom_growth_pct": -29.23,
+  "latest_yoy_growth_pct": -13.58,
+  "top_10_worst_orders": [
+    {
+      "order_id": "CA-2016-108196",
+      "profit": -6599.98
+    },
+    {
+      "order_id": "US-2017-168116",
+      "profit": -3839.99
+    },
+    {
+      "order_id": "CA-2014-169019",
+      "profit": -3701.89
+    },
+    {
+      "order_id": "CA-2017-134845",
+      "profit": -3399.98
+    },
+    {
+      "order_id": "US-2017-122714",
+      "profit": -2929.48
+    },
+    {
+      "order_id": "CA-2015-147830",
+      "profit": -2639.99
+    },
+    {
+      "order_id": "CA-2017-131254",
+      "profit": -2287.78
+    },
+    {
+      "order_id": "CA-2015-116638",
+      "profit": -1862.31
+    },
+    {
+      "order_id": "CA-2016-130946",
+      "profit": -1850.95
+    },
+    {
+      "order_id": "CA-2014-145317",
+      "profit": -1811.08
+    }
+  ]
+}
