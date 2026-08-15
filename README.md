@@ -4,20 +4,20 @@ End-to-end analysis pipeline for the Superstore sales dataset: SQL schema → Py
 
 ## Team
 
-- **A (Hamin)** — schema design, SQL analysis queries, Power BI dashboard
-- **B** — CSV-to-DB loader, statistical analysis, executive summary generation
+- **Hamin** — schema design, CSV-to-DB loader, statistical analysis, GPT executive summary generation
+- **Gyutae** — SQL analysis queries, Power BI dashboard, documentation
 
 ## Pipeline
 
 | Step | Owner | Output |
 |---|---|---|
-| 1. SQL schema design + DB table creation | A | [sql/schema.sql](sql/schema.sql) |
-| 2. Load CSV into DB | B | [python/load_data.py](python/load_data.py) |
-| 3. SQL analysis queries (monthly sales, category margins, regional performance, ...) | A | [sql/analysis_queries.sql](sql/analysis_queries.sql) |
-| 4. Statistical analysis (z-score outliers, MoM/YoY growth) | B | [python/analysis.py](python/analysis.py) |
-| 5. Power BI dashboard | A | [powerbi/dashboard.pbix](powerbi/dashboard.pbix) |
-| 6. GPT-generated executive summary | B | [python/generate_summary.py](python/generate_summary.py) |
-| 7. Docs | Both | this file, [docs/architecture.md](docs/architecture.md) |
+| 1. SQL schema design + DB table creation | Hamin | [sql/schema.sql](sql/schema.sql) |
+| 2. Load CSV into DB | Hamin | [python/load_data.py](python/load_data.py) |
+| 3. SQL analysis queries (monthly sales, category margins, regional performance, ...) | Gyutae | [sql/analysis_queries.sql](sql/analysis_queries.sql) |
+| 4. Statistical analysis (z-score outliers, MoM/YoY growth) | Hamin | [python/analysis.py](python/analysis.py) |
+| 5. Power BI dashboard | Gyutae | [powerbi/dashboard.pbix](powerbi/dashboard.pbix) |
+| 6. GPT-generated executive summary | Hamin | [python/generate_summary.py](python/generate_summary.py) |
+| 7. Docs | Gyutae | this file, [docs/architecture.md](docs/architecture.md) |
 
 See [docs/architecture.md](docs/architecture.md) for a diagram of how these pieces connect.
 
