@@ -19,7 +19,7 @@ engine = create_engine(
 )
 
 # ============================================================
-# 1. 월별 매출/이익 데이터 가져오기 
+# 1. Fetch monthly sales/profit data
 # ============================================================
 monthly_query = """
 SELECT
@@ -33,20 +33,20 @@ ORDER BY order_month;
 monthly = pd.read_sql(monthly_query, engine)
 
 # ============================================================
-# 2. Z-score 기반 이상치 탐지 (월별 매출/이익)
+# 2. Z-score-based outlier detection (monthly sales/profit)
 # ============================================================
 def add_zscore(df, col):
     mean = df[col].mean()
     std = df[col].std()
     df[f"{col}_zscore"] = (df[col] - mean) / std
-    df[f"{col}_is_outlier"] = df[f"{col}_zscore"].abs() > 2  # 임계값 2
+    df[f"{col}_is_outlier"] = df[f"{col}_zscore"].abs() > 2  # threshold: 2
     return df
 
 monthly = add_zscore(monthly, "total_sales")
 monthly = add_zscore(monthly, "total_profit")
 
 # ============================================================
-# 3. MoM(전월 대비) / YoY(전년 동월 대비) 성장률
+# 3. MoM (month-over-month) / YoY (year-over-year) growth
 # ============================================================
 monthly["order_month"] = pd.to_datetime(monthly["order_month"])
 monthly = monthly.sort_values("order_month").reset_index(drop=True)
@@ -55,7 +55,7 @@ monthly["mom_growth_pct"] = monthly["total_sales"].pct_change() * 100
 monthly["yoy_growth_pct"] = monthly["total_sales"].pct_change(periods=12) * 100
 
 # ============================================================
-# 4. 개별 주문(order line) 단위 이익 이상치 탐지
+# 4. Profit outlier detection at the individual order-line level
 # ============================================================
 orders_query = """
 SELECT row_id, order_id, order_date, sales, discount, profit
@@ -69,17 +69,17 @@ extreme_losses = orders[orders["profit_is_outlier"] & (orders["profit"] < 0)] \
     .head(10)
 
 # ============================================================
-# 5. 결과 출력 (터미널 확인용)
+# 5. Print results (for terminal review)
 # ============================================================
-print("=== 월별 이상치 탐지 결과 ===")
+print("=== Monthly Outlier Detection Results ===")
 print(monthly[["order_month", "total_sales", "total_sales_is_outlier",
                 "total_profit", "total_profit_is_outlier"]])
 
-print("\n=== 가장 손해가 컸던 주문 TOP 10 (통계적 이상치) ===")
+print("\n=== Top 10 Worst Orders by Loss (Statistical Outliers) ===")
 print(extreme_losses[["order_id", "order_date", "sales", "discount", "profit"]])
 
 # ============================================================
-# 6. GPT(Round 6)가 나중에 읽을 수 있게 요약 정보를 JSON으로 저장
+# 6. Save the summary as JSON for GPT (Round 6) to read later
 # ============================================================
 summary = {
     "total_months": len(monthly),
@@ -99,4 +99,4 @@ os.makedirs("data/processed", exist_ok=True)
 with open("data/processed/analysis_summary.json", "w", encoding="utf-8") as f:
     json.dump(summary, f, indent=2, ensure_ascii=False)
 
-print("\n분석 완료! 요약 결과가 data/processed/analysis_summary.json 에 저장됐어요.")
+print("\nAnalysis complete! Summary results saved to data/processed/analysis_summary.json.")

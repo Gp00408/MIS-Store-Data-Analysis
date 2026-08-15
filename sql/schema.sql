@@ -1,4 +1,4 @@
--- 고객 차원 테이블
+-- Customer dimension table
 CREATE TABLE dim_customers (
     customer_id     VARCHAR(20) PRIMARY KEY,
     customer_name   VARCHAR(100),
@@ -10,7 +10,7 @@ CREATE TABLE dim_customers (
     region          VARCHAR(20)
 );
 
--- 제품 차원 테이블
+-- Product dimension table
 CREATE TABLE dim_products (
     product_id      VARCHAR(20) PRIMARY KEY,
     category        VARCHAR(50),
@@ -18,7 +18,7 @@ CREATE TABLE dim_products (
     product_name    VARCHAR(255)
 );
 
--- 주문 팩트 테이블 (실제 거래 데이터)
+-- Order fact table (actual transaction data)
 CREATE TABLE fact_orders (
     row_id          INT PRIMARY KEY,
     order_id        VARCHAR(20),

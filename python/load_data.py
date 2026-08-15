@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 from urllib.parse import quote_plus
 
-# .env 파일에서 DB 접속 정보 불러오기
+# Load DB connection info from the .env file
 #Env does not transfer over so we need to make a new file for ourselves to test code.
 load_dotenv()
 
@@ -22,19 +22,19 @@ db_host = os.getenv("DB_HOST")
 db_port = os.getenv("DB_PORT")
 db_name = os.getenv("DB_NAME")
 
-# SQLAlchemy 엔진 생성 (DB 연결 통로)
+# Create the SQLAlchemy engine (the connection channel to the DB)
 engine = create_engine(
     f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 )
 
-# 원본 CSV 읽기
+# Read the raw CSV
 df = pd.read_csv("data/Superstore.csv", encoding="utf-8-sig")
 
-print("원본 데이터 shape:", df.shape)
+print("Raw data shape:", df.shape)
 print(df.columns.tolist())
 
 # ---------------------------
-# 1. dim_customers 테이블용 데이터 추출
+# 1. Extract data for the dim_customers table
 # ---------------------------
 customers = df[[
     "Customer ID", "Customer Name", "Segment",
@@ -47,7 +47,7 @@ customers.columns = [
 ]
 
 # ---------------------------
-# 2. dim_products 테이블용 데이터 추출
+# 2. Extract data for the dim_products table
 # ---------------------------
 products = df[[
     "Product ID", "Category", "Sub-Category", "Product Name"
@@ -56,7 +56,7 @@ products = df[[
 products.columns = ["product_id", "category", "sub_category", "product_name"]
 
 # ---------------------------
-# 3. fact_orders 테이블용 데이터 추출
+# 3. Extract data for the fact_orders table
 # ---------------------------
 orders = df[[
     "Row ID", "Order ID", "Order Date", "Ship Date", "Ship Mode",
@@ -68,20 +68,20 @@ orders.columns = [
     "customer_id", "product_id", "sales", "quantity", "discount", "profit"
 ]
 
-# 날짜 형식 변환 (MM/DD/YYYY -> DATE)
+# Convert date format (MM/DD/YYYY -> DATE)
 orders["order_date"] = pd.to_datetime(orders["order_date"])
 orders["ship_date"] = pd.to_datetime(orders["ship_date"])
 
 # ---------------------------
-# DB에 적재 (순서 중요: customers/products 먼저, orders 나중)
+# Load into the DB (order matters: customers/products first, then orders)
 # ---------------------------
 customers.to_sql("dim_customers", engine, if_exists="append", index=False)
-print(f"dim_customers: {len(customers)}행 적재 완료")
+print(f"dim_customers: {len(customers)} rows loaded")
 
 products.to_sql("dim_products", engine, if_exists="append", index=False)
-print(f"dim_products: {len(products)}행 적재 완료")
+print(f"dim_products: {len(products)} rows loaded")
 
 orders.to_sql("fact_orders", engine, if_exists="append", index=False)
-print(f"fact_orders: {len(orders)}행 적재 완료")
+print(f"fact_orders: {len(orders)} rows loaded")
 
-print("전체 완료!")
+print("All done!")
