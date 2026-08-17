@@ -1,4 +1,4 @@
-# MIS Store Data Analysis
+# MIS Store Data Analysis Pipeline
 
 End-to-end analysis pipeline for the Superstore sales dataset: SQL schema → Python ETL → SQL analytics → Python statistical analysis → Power BI dashboard → GPT-generated executive summary.
 
